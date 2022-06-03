@@ -10,7 +10,7 @@ def train(input_file):
     import numpy as np
     import pandas as pd
     from sklearn.model_selection import train_test_split
-    from sklearn.utils import resample
+    from sklearn.utils import resample, shuffle
     from sklearn.ensemble import RandomForestClassifier
     from sklearn.metrics import classification_report
 
@@ -54,10 +54,12 @@ def train(input_file):
     df_majority_downsampled = resample(
         df_majority, replace=False, n_samples=len(df_minority), random_state=123
     )
-    df_downsampled = pd.concat([df_majority_downsampled, df_minority])
+    df_downsampled = shhuffle(pd.concat([df_majority_downsampled, df_minority]))
     x_train = df_downsampled.drop(columns="Fraude")
     y_train = df_downsampled["Fraude"]
-    rf = RandomForestClassifier()
+    rf = RandomForestClassifier(
+        bootstrap=False, max_depth=50, min_samples_split=10, n_estimators=2000
+    )
     rf.fit(x_train, y_train)
     rf_preds = rf.predict(x_test)
     with open("./modelo_fraude.pickle", "wb") as model_file:
