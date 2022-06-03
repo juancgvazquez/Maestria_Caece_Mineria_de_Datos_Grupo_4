@@ -68,8 +68,11 @@ def train(input_file):
 
 
 @app.post("/train")
-async def trainer(file: UploadFile):
-    result = train(input_file=file.filename)
+async def trainer(uploaded_file: UploadFile):
+    file_location = f"./{uploaded_file.filename}"
+    with open(file_location, "wb+") as file_object:
+        file_object.write(uploaded_file.file.read())
+    result = train(file_location)
     return result
 
 
