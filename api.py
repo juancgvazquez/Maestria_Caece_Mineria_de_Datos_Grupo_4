@@ -54,7 +54,7 @@ def train(input_file):
     df_majority_downsampled = resample(
         df_majority, replace=False, n_samples=len(df_minority), random_state=123
     )
-    df_downsampled = shhuffle(pd.concat([df_majority_downsampled, df_minority]))
+    df_downsampled = shuffle(pd.concat([df_majority_downsampled, df_minority]))
     x_train = df_downsampled.drop(columns="Fraude")
     y_train = df_downsampled["Fraude"]
     rf = RandomForestClassifier(
